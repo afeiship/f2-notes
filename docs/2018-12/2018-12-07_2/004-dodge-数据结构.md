@@ -1,4 +1,5 @@
-# stack:
+# dodge:
+> 与 stack 相同
 
 ## f2 data:
 ```js
