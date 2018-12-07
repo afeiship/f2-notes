@@ -52,6 +52,21 @@
             }
         ];
 
+        var line3_data = [
+            {
+                x: '2018-12-01',
+                y: 10.2
+            },
+            {
+                x: '2018-12-02',
+                y: 13.2
+            },
+            {
+                x: '2018-12-03',
+                y: 12.9
+            }
+        ];
+
         function toStackData() {
             var result = [];
             var id = 0;
@@ -72,7 +87,13 @@
                 return item;
             });
 
-            result = [].concat(items1, items2);
+            var line3_typeId = identity();
+            var items3 = line3_data.map(item => {
+                item.type = 'type_' + line3_typeId;
+                return item;
+            });
+
+            result = [].concat(items1, items2, items3);
             return result;
         }
 
@@ -81,14 +102,15 @@
             pixelRatio: window.devicePixelRatio
         });
 
-        chart.interval().position('x*y').color('type', (inField) => {
-            switch (inField) {
-                case 'type_1':
-                    return '#FF6600';
-                case 'type_2':
-                    return '#336600';
+        chart.interval().position('x*y').color('type').adjust({ type: 'stack' }).style('type', {
+            opacity(inField) {
+                return inField === 'type_3' ? 0 : 1;
             }
-        }).adjust({ type: 'dodge', marginRatio: 0.1 });
+        }).size(70);
+
+        chart.interval().position('x*y').color('type').adjust({ type: 'dodge', marginRatio: 0 }).size('type', (inField) => {
+            return inField === 'type_2' ? 0 : 35
+        });
 
         console.log(
             toStackData()

@@ -61,9 +61,9 @@
         //如果需要统一数据轴：算出多个 field 的 min/max 值即可
         chart.interval().position('time*tem');
         chart.line().position('time*rain').color('#ff6600');
-        chart.scale('tem', scaleConfig);
+        // chart.scale('tem', scaleConfig);
         chart.scale('rain', scaleConfig);
-        chart.axis('rain', false);
+        // chart.axis('rain', false);
 
         chart.source(data);
         chart.render();
