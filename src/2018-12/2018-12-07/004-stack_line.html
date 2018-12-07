@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="chart-name" content="层叠柱状图">
+    <title> 层叠柱状图</title>
+    <link rel="stylesheet" href="https://gw.alipayobjects.com/os/rmsportal/YmDAMEQVbLJpVbKiRQVX.css" />
+
+</head>
+
+<body>
+    <script>/*Fixing iframe window.innerHeight 0 issue in Safari*/document.body.clientHeight;</script>
+
+    <script src="https://gw.alipayobjects.com/os/antv/assets/f2/3.3.0/f2.min.js"></script>
+
+    <script src="https://gw.alipayobjects.com/os/antv/assets/lib/lodash-4.17.4.min.js"></script>
+    <script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+    <!-- 在 PC 上模拟 touch 事件 -->
+    <script src="https://gw.alipayobjects.com/os/rmsportal/NjNldKHIVQRozfbAOJUW.js"></script>
+
+    <div class="chart-wrapper">
+        <canvas id="mountNode"></canvas>
+    </div>
+
+    <script>
+        var data = [{
+            type: 'London',
+            mon: 'Jan.',
+            tem: 6.4,
+            rain: 18.9
+        }, {
+            type: 'London',
+            mon: 'Feb.',
+            tem: 10.4,
+            rain: 28.8
+        }, {
+            type: 'London',
+            mon: 'Mar.',
+            tem: 12.8,
+            rain: 39.3
+        }, {
+            type: 'London',
+            mon: 'Apr.',
+            tem: 20.5,
+            rain: 81.4
+        }, {
+                type: 'Berlin',
+                mon: 'Jan.',
+                tem: 6.4,
+                rain: 12.4
+            }, {
+                type: 'Berlin',
+                mon: 'Feb.',
+                tem: 10.4,
+                rain: 23.2
+            }, {
+                type: 'Berlin',
+                mon: 'Mar.',
+                tem: 12.8,
+                rain: 34.5
+            }, {
+                type: 'Berlin',
+                mon: 'Apr.',
+                tem: 20.5,
+                rain: 49.7
+            },
+            {
+                type: 'Tem',
+                mon: 'Jan.',
+                tem: 6.4,
+                rain: 12.4
+            }, {
+                type: 'Tem',
+                mon: 'Feb.',
+                tem: 10.4,
+                rain: 23.2
+            }, {
+                type: 'Tem',
+                mon: 'Mar.',
+                tem: 12.8,
+                rain: 34.5
+            }, {
+                type: 'Tem',
+                mon: 'Apr.',
+                tem: 20.5,
+                rain: 49.7
+            }];
+
+        var chart = new F2.Chart({
+            id: 'mountNode',
+            pixelRatio: window.devicePixelRatio
+        });
+
+        var scaleConfig = { min: 0 };
+        chart.interval().position(["mon", "rain"]).color('type').adjust({ type: 'stack' });
+        chart.line().position('mon*tem').color('#FF6600');
+        chart.scale('tem', scaleConfig);
+        chart.scale('rain', scaleConfig);
+        chart.axis('tem', false);
+        chart.source(data);
+        chart.render();
+    </script>
+
+
+</body>
+
+</html>
