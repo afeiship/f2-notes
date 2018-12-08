@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="chart-name" content="双 y 轴">
+    <title>001-cus-shape</title>
+    <link rel="stylesheet" href="https://gw.alipayobjects.com/os/rmsportal/YmDAMEQVbLJpVbKiRQVX.css" />
+</head>
+
+<body>
+    <script>/*Fixing iframe window.innerHeight 0 issue in Safari*/document.body.clientHeight;</script>
+
+    <script src="https://gw.alipayobjects.com/os/antv/assets/f2/3.3.0/f2.min.js"></script>
+
+    <script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+    <!-- 在 PC 上模拟 touch 事件 -->
+    <script src="https://gw.alipayobjects.com/os/rmsportal/NjNldKHIVQRozfbAOJUW.js"></script>
+
+    <div class="chart-wrapper">
+        <canvas id="mountNode"></canvas>
+    </div>
+    <script>
+        var data1 = [
+            {
+                x: '2018-12-01',
+                y: 1.2
+            },
+            {
+                x: '2018-12-02',
+                y: 2.2
+            },
+            {
+                x: '2018-12-03',
+                y: 4.3
+            }
+        ];
+
+        var data2 = [
+            {
+                x: '2018-12-01',
+                y: 2.2
+            },
+            {
+                x: '2018-12-02',
+                y: 3.2
+            },
+            {
+                x: '2018-12-03',
+                y: 2.9
+            }
+        ];
+
+        var data3 = [
+            {
+                x: '2018-12-01',
+                y: 10.2
+            },
+            {
+                x: '2018-12-02',
+                y: 13.2
+            },
+            {
+                x: '2018-12-03',
+                y: 12.9
+            }
+        ];
+
+        function toStackData() {
+            var result = [];
+            var id = 0;
+            var identity = function () {
+                return ++id;
+            };
+            var dataList = [].slice.call(arguments);
+
+            var dataRes = dataList.map((data) => {
+                var idKey = identity();
+                return data.map(item => {
+                    item.type = 'type_' + idKey;
+                    return item;
+                })
+            });
+            return [].concat.apply([], dataRes);
+        }
+
+
+        var chart = new F2.Chart({
+            id: 'mountNode',
+            pixelRatio: window.devicePixelRatio
+        });
+
+
+        chart.source(toStackData(line1_data, line2_data));
+        chart.interval().position('x*y').color('type').adjust({ type: 'dodge' });
+
+
+        // chart.source(toStackData(line2_data, line3_data));
+        // chart.interval().position('x*y').color('type').adjust({ type: 'stack' });
+        
+        chart.render();
+    </script>
+
+
+</body>
+
+</html>
