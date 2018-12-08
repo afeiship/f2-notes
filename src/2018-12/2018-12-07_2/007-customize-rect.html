@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="chart-name" content="双 y 轴">
+    <title>007-customize-rect</title>
+    <link rel="stylesheet" href="https://gw.alipayobjects.com/os/rmsportal/YmDAMEQVbLJpVbKiRQVX.css" />
+</head>
+
+<body>
+    <script>/*Fixing iframe window.innerHeight 0 issue in Safari*/document.body.clientHeight;</script>
+
+    <script src="https://gw.alipayobjects.com/os/antv/assets/f2/3.3.0/f2.min.js"></script>
+
+    <script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+    <!-- 在 PC 上模拟 touch 事件 -->
+    <script src="https://gw.alipayobjects.com/os/rmsportal/NjNldKHIVQRozfbAOJUW.js"></script>
+
+    <div class="chart-wrapper">
+        <canvas id="mountNode"></canvas>
+    </div>
+    <script>
+        const Shape = F2.Shape;
+        Shape.registerShape('interval', 'triangle', {
+            getPoints: function (cfg) {
+                console.log(cfg);
+                const x = cfg.x;
+                const y = cfg.y;
+                const y0 = cfg.y0;
+                const width = cfg.size;
+                return [
+                    { x: x - width / 2, y: y0 },
+                    { x: x, y: y },
+                    { x: x + width / 2, y: y0 }
+                ]
+            },
+            draw: function (cfg, group) {
+                const points = this.parsePoints(cfg.points); // 将0-1空间的坐标转换为画布坐标
+                const polygon = group.addShape('polygon', {
+                    attrs: {
+                        points: [
+                            { x: points[0].x, y: points[0].y },
+                            { x: points[1].x, y: points[1].y },
+                            { x: points[2].x, y: points[2].y }
+                        ],
+                        fill: cfg.color
+                    }
+                });
+                if (cfg.origin._origin.ignore) {
+                    polygon.hide();
+                }
+                return polygon; // 将自定义Shape返回
+            }
+        });
+
+        const data = [
+            { genre: 'Sports', sold: 275 },
+            { genre: 'Strategy', sold: 115 },
+            { genre: 'Action', sold: 120 },
+            { ignore: true, genre: 'Shooter', sold: 350 },
+            { ignore: true, genre: 'Other', sold: 150 }
+        ];
+
+        const chart = new F2.Chart({
+            id: 'mountNode',
+            width: 500,
+            height: 320,
+            pixelRatio: window.devicePixelRatio
+        });
+
+        chart.source(data);
+        chart.axis('sold',{
+            grid(text, index, total){
+                console.log(text, index, total);
+                if (text === '350') { // 0％ 处的栅格线着重显示
+                    return {
+                        stroke: '#ff0000'
+                    };
+                }
+                return {
+                    stroke: '#FEE'
+                }
+                // return false
+            }
+        })
+        chart.scale('sold', {
+                min: 0,
+                range: [0,1],
+                alias: 'AQI(空气质量指数)',
+            });
+        chart.interval().position('genre*sold').color('genre').shape('triangle');
+        chart.render();
+    </script>
+
+
+</body>
+
+</html>
