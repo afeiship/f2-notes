@@ -30,28 +30,53 @@
             { year: '1951', value: 20, type: 's3' },
             { year: '1952', value: 80, type: 's3' }
         ];
+        const data4 = [
+            { year: '1951', value: 10.2, type: 's4' },
+            { year: '1952', value: 30.6, type: 's4' }
+        ];
+
+        const data5 = [
+            { year: '1951', value: 10, type: 's5' },
+            { year: '1952', value: 5.6, type: 's5' }
+        ];
+        const data6 = [
+            { year: '1951', value: 12.2, type: 's6' },
+            { year: '1952', value: 10.6, type: 's6' }
+        ];
 
         var dataRes = groupData(
             {
                 type1: data1,
                 type2: data2,
                 type3: data3,
-            }, [['type1', 'type2'], ['type3']]
+                type4: data4,
+                type5: data5,
+                type6: data6,
+            },
+            [
+                ['type1', 'type4', 'type6'],
+                ['type3', 'type2'],
+                ['type5']
+            ]
         );
 
         function groupData(inDataMapping, inGroup) {
             var rst = [];
             var len = inGroup.length;
+            Object.keys(inDataMapping).forEach(item => {
+                for (var i = 0; i < len; i++) {
+                    inDataMapping[item].forEach(dataItem => {
+                        dataItem[`g${i + 1}`] = null;
+                    })
+                }
+            })
+
+            console.log(inDataMapping);
             inGroup.forEach((group, index) => {
                 group.forEach(dataItem => {
+                    // dataMapping['type1']
                     inDataMapping[dataItem].forEach(item => {
-                        for (var i = 0; i < len; i++) {
-                            if (index === i) {
-                                item[`g${i + 1}`] = item.value;
-                            } else {
-                                item[`g${i + 1}`] = null;
-                            }
-                        }
+                        item[`g${index + 1}`] = item.value;
                         rst.push(item);
                     });
                 });
@@ -150,28 +175,44 @@
             .position('year*g2')
             .shape('tile')
             .color('type')
+        let geom3 = chart
+            .interval()
+            .position('year*g3')
+            .shape('tile')
+            .color('type')
         chart.render()
 
         // 宽度判断
-        const intervalCount = 2
+        
         const xScale = geom.getXScale()
+        const intervalCount = 3 // == xScale.values.length ?
         const xWidth = geom.getDimWidth('x')
         const intervalWidth = xWidth / xScale.values.length
-        const gap = intervalWidth * 0.2
-        const contentWidth = intervalWidth * 0.6
+        const gap = intervalWidth * 0.1
+        const contentWidth = intervalWidth * 0.8
         const barWidth = contentWidth / intervalCount
         // 1. offset/gap 等参数 放在 options
         // 2. 下面的计算可以放在  draw 里进行
+
+        console.log(barWidth);
+
         geom
             .size(barWidth)
             .style({
-                offset: gap + barWidth / 2 - intervalWidth / 2
-            })
+                offset: gap + barWidth / 3 - intervalWidth / 3 + 0 * barWidth
+            });
+
         geom1
             .size(barWidth)
             .style({
-                offset: gap + barWidth / 2 - intervalWidth / 2 + barWidth
-            })
+                offset: gap + barWidth / 3 - intervalWidth / 3 + 1 * barWidth
+            });
+
+        geom3
+            .size(barWidth)
+            .style({
+                offset: gap + barWidth / 3 - intervalWidth / 3 + 2 * barWidth
+            });
         chart.repaint()
     </script>
 </body>
