@@ -60,6 +60,39 @@
             ]
         );
 
+        function createGroup() {
+            /*
+            {
+                type1: data1,
+                type2: data2,
+                type3: data3,
+                type4: data4,
+                type5: data5,
+                type6: data6,
+            },
+            [
+                ['type1', 'type4', 'type6'],
+                ['type3', 'type2'],
+                ['type5']
+            ]
+
+            //dynamic create/remove/insert/add  group item:
+
+            F2.Chart.prototype.$group = {};
+            chart.$group.create(inGroupData,(gemo)=>{
+                gemo.color().xx();
+            });
+            chart.$group.gets();
+            chart.$group.get();
+            chart.$group.set('groupId',xx);
+            chart.$group.sets('groupId',xx);
+            chart.$group.add({ type10: data10 }, ['type10']);
+            chart.$group.remove(inIndex/groupId);
+            chart.$group.repaint();
+            */
+        }
+
+        // todo: to be optimized:
         function groupData(inDataMapping, inGroup) {
             var rst = [];
             var len = inGroup.length;
@@ -71,10 +104,8 @@
                 }
             })
 
-            console.log(inDataMapping);
             inGroup.forEach((group, index) => {
                 group.forEach(dataItem => {
-                    // dataMapping['type1']
                     inDataMapping[dataItem].forEach(item => {
                         item[`g${index + 1}`] = item.value;
                         rst.push(item);
@@ -84,15 +115,6 @@
             return rst;
         }
         // 数据格式
-        const data = [
-            { year: '1951', g1: 38, s3: null, type: 's1' },
-            { year: '1952', g1: 16, s3: null, type: 's1' },
-            { year: '1951', g1: 12, s3: null, type: 's2' },
-            { year: '1952', g1: 18, s3: null, type: 's2' },
-            { year: '1951', g1: null, s3: 20, type: 's3' },
-            { year: '1952', g1: null, s3: 80, type: 's3' },
-        ];
-
         console.log(dataRes);
 
         const chart = new F2.Chart({
@@ -185,7 +207,7 @@
         // 宽度判断
 
         const xScale = geom.getXScale()
-        const intervalCount = 3 // == xScale.values.length ?
+        const intervalCount = 3 // group length
         const xWidth = geom.getDimWidth('x')
         const intervalWidth = xWidth / xScale.values.length
         const gap = intervalWidth * 0.1
@@ -194,14 +216,20 @@
         // 1. offset/gap 等参数 放在 options
         // 2. 下面的计算可以放在  draw 里进行
 
-        console.log(barWidth);
-        geom.size(barWidth).style({
-            offset: -1.5 * barWidth + gap
-        });
-        geom1.size(barWidth);
-        geom3.size(barWidth).style({
-            offset: 1.5 * barWidth - gap
-        });
+        geom
+            .size(barWidth)
+            .style({
+                offset: -1.5 * barWidth + gap
+            });
+
+        geom1.
+            size(barWidth);
+
+        geom3
+            .size(barWidth)
+            .style({
+                offset: 1.5 * barWidth - gap
+            });
 
 
         // geom
