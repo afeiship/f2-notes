@@ -46,6 +46,7 @@
     </div>
     <script>
         // BUG: repaint: must be paint twice
+        // OPTIMIZE: 可以用 callback 的方式去优化 changeGrid 部分逻辑
         var btnDash = document.getElementById('btn-dash');
         var btnDot = document.getElementById('btn-dot');
         var btnRemove = document.getElementById('btn-remove');
