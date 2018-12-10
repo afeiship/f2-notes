@@ -183,7 +183,7 @@
         chart.render()
 
         // 宽度判断
-        
+
         const xScale = geom.getXScale()
         const intervalCount = 3 // == xScale.values.length ?
         const xWidth = geom.getDimWidth('x')
@@ -195,24 +195,32 @@
         // 2. 下面的计算可以放在  draw 里进行
 
         console.log(barWidth);
+        geom.size(barWidth).style({
+            offset: -1.5 * barWidth + gap
+        });
+        geom1.size(barWidth);
+        geom3.size(barWidth).style({
+            offset: 1.5 * barWidth - gap
+        });
 
-        geom
-            .size(barWidth)
-            .style({
-                offset: gap + barWidth / 3 - intervalWidth / 3 + 0 * barWidth
-            });
 
-        geom1
-            .size(barWidth)
-            .style({
-                offset: gap + barWidth / 3 - intervalWidth / 3 + 1 * barWidth
-            });
+        // geom
+        //     .size(barWidth)
+        //     .style({
+        //         offset: gap + barWidth / 3 - intervalWidth / 3 + 0 * barWidth
+        //     });
 
-        geom3
-            .size(barWidth)
-            .style({
-                offset: gap + barWidth / 3 - intervalWidth / 3 + 2 * barWidth
-            });
+        // geom1
+        //     .size(barWidth)
+        //     .style({
+        //         offset: gap + barWidth / 3 - intervalWidth / 3 + 1 * barWidth
+        //     });
+
+        // geom3
+        //     .size(barWidth)
+        //     .style({
+        //         offset: gap + barWidth / 3 - intervalWidth / 3 + 2 * barWidth
+        //     });
         chart.repaint()
     </script>
 </body>
