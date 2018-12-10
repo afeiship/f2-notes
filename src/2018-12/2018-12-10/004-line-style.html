@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="chart-name" content="双 y 轴">
+    <title>004-line-style</title>
+    <link rel="stylesheet" href="https://gw.alipayobjects.com/os/rmsportal/YmDAMEQVbLJpVbKiRQVX.css" />
+    <style>
+        .actions-bar {
+            padding: 10px;
+        }
+
+        .actions-bar button {
+            border: none;
+            padding: 10px;
+            margin-right: 10px;
+            border-radius: 10px;
+            background: #007aff;
+            color: #fff;
+        }
+
+        .actions-bar button:active {
+            background: #00f;
+        }
+    </style>
+</head>
+
+<body>
+    <script>/*Fixing iframe window.innerHeight 0 issue in Safari*/document.body.clientHeight;</script>
+
+    <script src="https://gw.alipayobjects.com/os/antv/assets/f2/3.3.0/f2.min.js"></script>
+
+    <script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+    <!-- 在 PC 上模拟 touch 事件 -->
+    <script src="https://gw.alipayobjects.com/os/rmsportal/NjNldKHIVQRozfbAOJUW.js"></script>
+
+    <div class="actions-bar">
+        <button id='btn-dash'>ToDash</button>
+        <button id='btn-dot'>ToDot</button>
+        <button id='btn-solid'>ToSolid</button>
+    </div>
+    <div class="chart-wrapper">
+        <canvas id="mountNode"></canvas>
+    </div>
+    <script>
+        // BUG: repaint: must be paint twice
+        // OPTIMIZE: 可以用 callback 的方式去优化 changeGrid 部分逻辑
+        var btnDash = document.getElementById('btn-dash');
+        var btnDot = document.getElementById('btn-dot');
+        var btnSolid = document.getElementById('btn-solid');
+        var data = [
+            {
+                x: '2018-12-01',
+                y: 1.2
+            },
+            {
+                x: '2018-12-02',
+                y: 2.2
+            },
+            {
+                x: '2018-12-03',
+                y: 4.3
+            },
+            {
+                x: '2018-12-04',
+                y: 6.3
+            },
+            {
+                x: '2018-12-05',
+                y: 3.3
+            }
+        ];
+
+        var chart = new F2.Chart({
+            id: 'mountNode',
+            pixelRatio: window.devicePixelRatio
+        });
+
+        function changeGridStyle(inCh1, inLineDash) {
+            var lineDash = inLineDash || null
+            var grid = inLineDash ? {
+                lineDash: lineDash,
+            } : null;
+
+            ch1.style(grid)
+            chart.repaint();
+            chart.repaint();
+        }
+
+
+        var ch1 = chart.line().position('x*y').color('#ff6600');
+        btnDash.onclick = function () {
+            changeGridStyle(ch1, [4, 10])
+        };
+        btnDot.onclick = function () {
+            changeGridStyle(ch1, [1, 10])
+        };
+        btnSolid.onclick = function () {
+            changeGridStyle(ch1, null)
+        };
+
+        chart.source(data);
+        chart.render();
+    </script>
+
+
+</body>
+
+</html>
