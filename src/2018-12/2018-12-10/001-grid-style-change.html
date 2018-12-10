@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="chart-name" content="双 y 轴">
+    <title>001-grid-style-change</title>
+    <link rel="stylesheet" href="https://gw.alipayobjects.com/os/rmsportal/YmDAMEQVbLJpVbKiRQVX.css" />
+
+</head>
+
+<body>
+    <script>/*Fixing iframe window.innerHeight 0 issue in Safari*/document.body.clientHeight;</script>
+
+    <script src="https://gw.alipayobjects.com/os/antv/assets/f2/3.3.0/f2.min.js"></script>
+
+    <script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+    <!-- 在 PC 上模拟 touch 事件 -->
+    <script src="https://gw.alipayobjects.com/os/rmsportal/NjNldKHIVQRozfbAOJUW.js"></script>
+
+    <div class="actions-bar">
+        <button id='btn-dash'>ToDash</button>
+        <button id='btn-dot'>ToDot</button>
+        <button id='btn-remove'>ToRemove</button>
+    </div>
+    <div class="chart-wrapper">
+        <canvas id="mountNode"></canvas>
+    </div>
+    <script>
+        var btnDash = document.getElementById('btn-dash');
+        var btnDot = document.getElementById('btn-dot');
+        var btnRemove = document.getElementById('btn-remove');
+        var data = [
+            {
+                x: '2018-12-01',
+                y: 1.2
+            },
+            {
+                x: '2018-12-02',
+                y: 2.2
+            },
+            {
+                x: '2018-12-03',
+                y: 4.3
+            },
+            {
+                x: '2018-12-04',
+                y: 6.3
+            },
+            {
+                x: '2018-12-05',
+                y: 3.3
+            }
+        ];
+
+        var chart = new F2.Chart({
+            id: 'mountNode',
+            pixelRatio: window.devicePixelRatio
+        });
+
+        function changeGridStyle(inLineDash) {
+            var lineDash = inLineDash || null
+            chart.axis('x', {
+                grid: {
+                    lineDash: lineDash,
+                    stroke: '#000066',
+                    lineWidth: 1
+                }
+            })
+
+            // chart.axis('y', {
+            //     grid: {
+            //         lineDash: lineDash,
+            //         stroke: '#000066',
+            //         lineWidth: 1
+            //     }
+            // })
+            chart.repaint();
+        }
+
+        btnDash.onclick = function () {
+            changeGridStyle([2,6])
+        };
+        btnDot.onclick = function () { 
+            changeGridStyle([2, 2])
+        };
+        btnRemove.onclick = function () { };
+
+        chart.line().position('x*y').color('#ff6600');
+
+        chart.source(data);
+        chart.render();
+    </script>
+
+
+</body>
+
+</html>
