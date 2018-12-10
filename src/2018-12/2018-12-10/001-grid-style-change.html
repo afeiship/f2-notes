@@ -8,20 +8,22 @@
     <title>001-grid-style-change</title>
     <link rel="stylesheet" href="https://gw.alipayobjects.com/os/rmsportal/YmDAMEQVbLJpVbKiRQVX.css" />
     <style>
-    .actions-bar{
-        padding: 10px;
-    }
-    .actions-bar button{
-        border:none;
-        padding:10px;
-        margin-right: 10px;
-        border-radius: 10px;
-        background: #007aff;
-        color: #fff;
-    }
-    .actions-bar button:active{
-        background: #00f;
-    }
+        .actions-bar {
+            padding: 10px;
+        }
+
+        .actions-bar button {
+            border: none;
+            padding: 10px;
+            margin-right: 10px;
+            border-radius: 10px;
+            background: #007aff;
+            color: #fff;
+        }
+
+        .actions-bar button:active {
+            background: #00f;
+        }
     </style>
 </head>
 
@@ -43,6 +45,7 @@
         <canvas id="mountNode"></canvas>
     </div>
     <script>
+        // BUG: repaint: must be paint twice
         var btnDash = document.getElementById('btn-dash');
         var btnDot = document.getElementById('btn-dot');
         var btnRemove = document.getElementById('btn-remove');
@@ -81,9 +84,10 @@
                 stroke: '#000066',
                 lineWidth: 1
             } : null;
+
             chart.axis('x', {
                 grid: grid
-            })
+            });
 
             // chart.axis('y', {
             //     grid: {
@@ -94,13 +98,12 @@
             // })
             chart.repaint();
             chart.repaint();
-            // chart.render();
         }
 
         btnDash.onclick = function () {
-            changeGridStyle([2,6])
+            changeGridStyle([2, 6])
         };
-        btnDot.onclick = function () { 
+        btnDot.onclick = function () {
             changeGridStyle([2, 2])
         };
         btnRemove.onclick = function () {
