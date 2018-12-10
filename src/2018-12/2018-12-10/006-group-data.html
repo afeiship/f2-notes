@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>柱状图</title>
-    
+
     <!-- <link rel="stylesheet" href="./assets/common.css"> -->
 </head>
 
@@ -15,23 +15,68 @@
     </div>
     <script src="https://gw.alipayobjects.com/os/antv/assets/f2/3.3.0/f2.min.js"></script>
     <script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+    <!-- 在 PC 上模拟 touch 事件 -->
+    <script src="https://gw.alipayobjects.com/os/rmsportal/NjNldKHIVQRozfbAOJUW.js"></script>
     <script type="text/javascript">
+        const data1 = [
+            { year: '1951', value: 38, type: 's1' },
+            { year: '1952', value: 16, type: 's1' },
+        ];
+        const data2 = [
+            { year: '1951', value: 12, type: 's2' },
+            { year: '1952', value: 18, type: 's2' },
+        ];
+        const data3 = [
+            { year: '1951', value: 20, type: 's3' },
+            { year: '1952', value: 80, type: 's3' }
+        ];
+
+        var dataRes = groupData(
+            {
+                type1: data1,
+                type2: data2,
+                type3: data3,
+            }, [['type1', 'type2'], ['type3']]
+        );
+
+        function groupData(inDataMapping, inGroup) {
+            var rst = [];
+            var len = inGroup.length;
+            inGroup.forEach((group, index) => {
+                group.forEach(dataItem => {
+                    inDataMapping[dataItem].forEach(item => {
+                        for (var i = 0; i < len; i++) {
+                            if (index === i) {
+                                item[`g${i + 1}`] = item.value;
+                            } else {
+                                item[`g${i + 1}`] = null;
+                            }
+                        }
+                        rst.push(item);
+                    });
+                });
+            })
+            return rst;
+        }
         // 数据格式
         const data = [
             { year: '1951', g1: 38, s3: null, type: 's1' },
-            { year: '1951', g1: 12, s3: null, type: 's2' },
             { year: '1952', g1: 16, s3: null, type: 's1' },
+            { year: '1951', g1: 12, s3: null, type: 's2' },
             { year: '1952', g1: 18, s3: null, type: 's2' },
             { year: '1951', g1: null, s3: 20, type: 's3' },
-            { year: '1952', g1: null, s3: 70, type: 's3' },
+            { year: '1952', g1: null, s3: 80, type: 's3' },
         ];
+
+        console.log(dataRes);
+
         const chart = new F2.Chart({
             id: 'mountNode',
             width: window.innerWidth,
             height: window.innerWidth * 0.64,
             pixelRatio: window.devicePixelRatio
         });
-        chart.source(data)
+        chart.source(dataRes)
 
         // 自定义图形
         const Shape = F2.Shape
@@ -102,7 +147,7 @@
             .adjust('stack');
         let geom1 = chart
             .interval()
-            .position('year*s3')
+            .position('year*g2')
             .shape('tile')
             .color('type')
         chart.render()
@@ -112,8 +157,8 @@
         const xScale = geom.getXScale()
         const xWidth = geom.getDimWidth('x')
         const intervalWidth = xWidth / xScale.values.length
-        const gap = intervalWidth * 0.1
-        const contentWidth = intervalWidth * 0.8
+        const gap = intervalWidth * 0.2
+        const contentWidth = intervalWidth * 0.6
         const barWidth = contentWidth / intervalCount
         // 1. offset/gap 等参数 放在 options
         // 2. 下面的计算可以放在  draw 里进行

@@ -74,6 +74,23 @@
             }
         ];
 
+        function randomN(inMin, inMax) {
+            var addition = inMax - inMin;
+            return parseInt(Math.random() * addition, 10) + inMin;
+        };
+
+        function genData(inLen) {
+            var len = inLen || 5000;
+            var rst = [];
+            for (let index = 0; index < len; index++) {
+                rst.push({
+                    x: index + 10,
+                    y: randomN(1, 2000)
+                })
+            }
+            return rst;
+        }
+
         var chart = new F2.Chart({
             id: 'mountNode',
             pixelRatio: window.devicePixelRatio
@@ -129,7 +146,7 @@
         });
         /* Customize step line*/
 
-        var ch1 = chart.line().position('x*y').color('#ff6600');
+        var ch1 = chart.line().position('x*y').color('#ff6600').shape('smooth');
         btnToSmooth.onclick = function () {
             ch1.shape('smooth');
             chart.repaint();
@@ -153,7 +170,9 @@
             chart.repaint();
         };
 
-        chart.source(data);
+        const bigData = genData(600);
+        console.log(bigData);
+        chart.source(bigData);
         chart.render();
     </script>
 
