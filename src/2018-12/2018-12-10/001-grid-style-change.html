@@ -76,12 +76,13 @@
 
         function changeGridStyle(inLineDash) {
             var lineDash = inLineDash || null
+            var grid = inLineDash ? {
+                lineDash: lineDash,
+                stroke: '#000066',
+                lineWidth: 1
+            } : null;
             chart.axis('x', {
-                grid: {
-                    lineDash: lineDash,
-                    stroke: '#000066',
-                    lineWidth: 1
-                }
+                grid: grid
             })
 
             // chart.axis('y', {
