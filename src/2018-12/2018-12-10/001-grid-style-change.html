@@ -102,7 +102,9 @@
         btnDot.onclick = function () { 
             changeGridStyle([2, 2])
         };
-        btnRemove.onclick = function () { };
+        btnRemove.onclick = function () {
+            changeGridStyle(null)
+        };
 
         chart.line().position('x*y').color('#ff6600');
 
