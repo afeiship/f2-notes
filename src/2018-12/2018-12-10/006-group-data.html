@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>柱状图</title>
+    
+    <!-- <link rel="stylesheet" href="./assets/common.css"> -->
+</head>
+
+<body>
+    <div>
+        <canvas id="mountNode"></canvas>
+    </div>
+    <script src="https://gw.alipayobjects.com/os/antv/assets/f2/3.3.0/f2.min.js"></script>
+    <script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript">
+        // 数据格式
+        const data = [
+            { year: '1951', g1: 38, s3: null, type: 's1' },
+            { year: '1951', g1: 12, s3: null, type: 's2' },
+            { year: '1952', g1: 16, s3: null, type: 's1' },
+            { year: '1952', g1: 18, s3: null, type: 's2' },
+            { year: '1951', g1: null, s3: 20, type: 's3' },
+            { year: '1952', g1: null, s3: 70, type: 's3' },
+        ];
+        const chart = new F2.Chart({
+            id: 'mountNode',
+            width: window.innerWidth,
+            height: window.innerWidth * 0.64,
+            pixelRatio: window.devicePixelRatio
+        });
+        chart.source(data)
+
+        // 自定义图形
+        const Shape = F2.Shape
+        Shape.registerShape('interval', 'tile', {
+            getPoints: function (cfg) {
+                const { x, y, y0, size } = cfg;
+
+                let ymin = y0;
+                let ymax = y;
+                if (Array.isArray(y)) {
+                    ymax = y[1];
+                    ymin = y[0];
+                }
+
+                let xmin;
+                let xmax;
+                if (Array.isArray(x)) {
+                    xmin = x[0];
+                    xmax = x[1];
+                } else {
+                    xmin = x - size / 2;
+                    xmax = x + size / 2;
+                }
+
+                return [
+                    { x: xmin, y: ymin },
+                    { x: xmin, y: ymax },
+                    { x: xmax, y: ymax },
+                    { x: xmax, y: ymin }
+                ];
+            },
+            draw: function (cfg, group) {
+                const points = this.parsePoints(cfg.points)
+                const height = points[1].y - points[0].y
+                const width = points[2].x - points[0].x
+                let offset = cfg.style || 0
+                if (cfg.style) {
+                    offset = cfg.style.offset || 0
+                }
+                const attrs = {
+                    x: points[0].x + offset,
+                    y: points[0].y,
+                    height: height,
+                    width: width,
+                    fill: cfg.color
+                }
+                const tile = group.addShape('rect', {
+                    attrs
+                })
+                return tile
+            }
+        })
+
+        chart.tooltip({
+            showItemMarker: false,
+            onShow(ev) {
+                const { items } = ev;
+                items[0].name = null;
+                // items[0].name = items[0].title;
+                items[0].value = '¥ ' + items[0].value;
+            }
+        });
+        let geom = chart
+            .interval()
+            .position('year*g1')
+            .color('type')
+            .shape('tile')
+            .adjust('stack');
+        let geom1 = chart
+            .interval()
+            .position('year*s3')
+            .shape('tile')
+            .color('type')
+        chart.render()
+
+        // 宽度判断
+        const intervalCount = 2
+        const xScale = geom.getXScale()
+        const xWidth = geom.getDimWidth('x')
+        const intervalWidth = xWidth / xScale.values.length
+        const gap = intervalWidth * 0.1
+        const contentWidth = intervalWidth * 0.8
+        const barWidth = contentWidth / intervalCount
+        // 1. offset/gap 等参数 放在 options
+        // 2. 下面的计算可以放在  draw 里进行
+        geom
+            .size(barWidth)
+            .style({
+                offset: gap + barWidth / 2 - intervalWidth / 2
+            })
+        geom1
+            .size(barWidth)
+            .style({
+                offset: gap + barWidth / 2 - intervalWidth / 2 + barWidth
+            })
+        chart.repaint()
+    </script>
+</body>
+
+</html>

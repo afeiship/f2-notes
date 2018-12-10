@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="chart-name" content="双 y 轴">
+    <title>005-multiple-line</title>
+    <link rel="stylesheet" href="https://gw.alipayobjects.com/os/rmsportal/YmDAMEQVbLJpVbKiRQVX.css" />
+    <style>
+        .actions-bar {
+            padding: 10px;
+        }
+
+        .actions-bar button {
+            border: none;
+            padding: 10px;
+            margin-right: 10px;
+            border-radius: 10px;
+            background: #007aff;
+            color: #fff;
+        }
+
+        .actions-bar button:active {
+            background: #00f;
+        }
+    </style>
+</head>
+
+<body>
+    <script>/*Fixing iframe window.innerHeight 0 issue in Safari*/document.body.clientHeight;</script>
+
+    <script src="https://gw.alipayobjects.com/os/antv/assets/f2/3.3.0/f2-all.js"></script>
+
+    <script src="https://gw.alipayobjects.com/os/antv/assets/lib/jquery-3.2.1.min.js"></script>
+    <!-- 在 PC 上模拟 touch 事件 -->
+    <script src="https://gw.alipayobjects.com/os/rmsportal/NjNldKHIVQRozfbAOJUW.js"></script>
+
+    <div class="actions-bar">
+        <button id='btn-dash'>ToDash</button>
+        <button id='btn-dot'>ToDot</button>
+        <button id='btn-solid'>ToSolid</button>
+    </div>
+    <div class="chart-wrapper">
+        <canvas id="mountNode"></canvas>
+    </div>
+    <script>
+        // 这里的关键是数据的对齐
+        // min/max 值的计算
+        var btnDash = document.getElementById('btn-dash');
+        var btnDot = document.getElementById('btn-dot');
+        var btnSolid = document.getElementById('btn-solid');
+        var data1 = [
+            {
+                x: '2017-06-05',
+                y: 1.2
+            },
+            {
+                x: '2017-06-06',
+                y: 2.2
+            },
+            {
+                x: '2017-06-07',
+                y: 4.3
+            },
+            {
+                x: '2017-06-08',
+                y: 6.3
+            },
+            {
+                x: '2017-06-09',
+                y: 3.3
+            }
+        ];
+
+        var data2 = [{
+            date: "2017-06-05",
+            value: 116
+        }, {
+            date: "2017-06-06",
+            value: 129
+        }, {
+            date: "2017-06-07",
+            value: 135
+        }, {
+            date: "2017-06-08",
+            value: 86
+        }, {
+            date: "2017-06-09",
+            value: 73
+        }, {
+            date: "2017-06-10",
+            value: 85
+        }, {
+            date: "2017-06-11",
+            value: 73
+        }, {
+            date: "2017-06-12",
+            value: 68
+        }, {
+            date: "2017-06-13",
+            value: 92
+        }, {
+            date: "2017-06-14",
+            value: 130
+        }, {
+            date: "2017-06-15",
+            value: 245
+        }, {
+            date: "2017-06-16",
+            value: 139
+        }, {
+            date: "2017-06-17",
+            value: 115
+        }, {
+            date: "2017-06-18",
+            value: 111
+        }, {
+            date: "2017-06-19",
+            value: 309
+        }, {
+            date: "2017-06-20",
+            value: 206
+        }, {
+            date: "2017-06-21",
+            value: 137
+        }, {
+            date: "2017-06-22",
+            value: 128
+        }, {
+            date: "2017-06-23",
+            value: 85
+        }, {
+            date: "2017-06-24",
+            value: 94
+        }, {
+            date: "2017-06-25",
+            value: 71
+        }, {
+            date: "2017-06-26",
+            value: 106
+        }, {
+            date: "2017-06-27",
+            value: 84
+        }, {
+            date: "2017-06-28",
+            value: 93
+        }, {
+            date: "2017-06-29",
+            value: 85
+        }, {
+            date: "2017-06-30",
+            value: 73
+        }, {
+            date: "2017-07-01",
+            value: 83
+        }, {
+            date: "2017-07-02",
+            value: 125
+        }, {
+            date: "2017-07-03",
+            value: 107
+        }, {
+            date: "2017-07-04",
+            value: 82
+        }, {
+            date: "2017-07-05",
+            value: 44
+        }, {
+            date: "2017-07-06",
+            value: 72
+        }, {
+            date: "2017-07-07",
+            value: 106
+        }, {
+            date: "2017-07-08",
+            value: 107
+        }, {
+            date: "2017-07-09",
+            value: 66
+        }, {
+            date: "2017-07-10",
+            value: 91
+        }, {
+            date: "2017-07-11",
+            value: 92
+        }, {
+            date: "2017-07-12",
+            value: 113
+        }, {
+            date: "2017-07-13",
+            value: 107
+        }, {
+            date: "2017-07-14",
+            value: 131
+        }, {
+            date: "2017-07-15",
+            value: 111
+        }, {
+            date: "2017-07-16",
+            value: 64
+        }, {
+            date: "2017-07-17",
+            value: 69
+        }, {
+            date: "2017-07-18",
+            value: 88
+        }, {
+            date: "2017-07-19",
+            value: 77
+        }, {
+            date: "2017-07-20",
+            value: 83
+        }, {
+            date: "2017-07-21",
+            value: 111
+        }, {
+            date: "2017-07-22",
+            value: 57
+        }, {
+            date: "2017-07-23",
+            value: 55
+        }, {
+            date: "2017-07-24",
+            value: 60
+        }];
+
+        var data = getData();
+
+        console.log(data);
+
+        function getData() {
+            var length = Math.max(data1.length, data2.length);
+            var result = [];
+            for (let index = 0; index < length; index++) {
+                result.push(
+                    Object.assign({
+                        xx: data2[index].date
+                    }, data1[index], data2[index])
+                );
+            }
+            return result
+        }
+
+        var chart = new F2.Chart({
+            id: 'mountNode',
+            pixelRatio: window.devicePixelRatio
+        });
+
+        function changeGridStyle(inCh1, inLineDash) {
+            var lineDash = inLineDash || null
+            var grid = inLineDash ? {
+                lineDash: lineDash,
+            } : null;
+
+            ch1.style(grid)
+            ch2.style(grid)
+            chart.repaint();
+            chart.repaint();
+        }
+
+
+        var ch1 = chart.line().position('xx*y').color('#ff6600');
+        var ch2 = chart.line().position('xx*value').color('#333333');
+
+        chart.axis('xAxis', {
+            label: function () {
+                console.log('label y...');
+                return {
+                    rotate: -Math.PI / 2,
+                    textAlign: 'end',
+                    textBaseline: 'middle'
+                }
+            }
+        })
+        console.log(data);
+        chart.scale('y', { min: 0, max: 400 });
+        chart.scale('value', { min: 0, max: 400 });
+        chart.interaction('pan');
+        // 定义进度条
+        chart.scrollBar({
+            mode: 'x',
+            xStyle: {
+                offsetY: 0
+            }
+        });
+
+        chart.axis('value', false);
+        btnDash.onclick = function () {
+            changeGridStyle(ch1, [4, 10])
+            changeGridStyle(ch2, [4, 10])
+        };
+        btnDot.onclick = function () {
+            changeGridStyle(ch1, [1, 10])
+            changeGridStyle(ch2, [1, 10])
+        };
+        btnSolid.onclick = function () {
+            changeGridStyle(ch1, null)
+            changeGridStyle(ch2, null)
+        };
+
+
+        chart.source(data, {
+            xx: {
+                type: 'timeCat',
+                tickCount: 5,
+                values: data.map(item => item.xx).slice(0,10),
+                mask: 'MM-DD'
+            }
+        });
+        chart.render();
+    </script>
+
+
+</body>
+
+</html>
