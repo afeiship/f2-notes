@@ -44,6 +44,11 @@
             { year: '1952', value: 10.6, type: 's6' }
         ];
 
+        const data7 = [
+            { year: '1951', val: 12.2 },
+            { year: '1952', val: 30.6 }
+        ];
+
         var dataRes = groupData(
             {
                 type1: data1,
@@ -102,7 +107,7 @@
                         dataItem[`g${i + 1}`] = null;
                     })
                 }
-            })
+            });
 
             inGroup.forEach((group, index) => {
                 group.forEach(dataItem => {
@@ -115,6 +120,8 @@
             return rst;
         }
         // 数据格式
+                
+        dataRes = dataRes.concat(data7)
         console.log(dataRes);
 
         const chart = new F2.Chart({
@@ -202,6 +209,10 @@
             .position('year*g3')
             .shape('tile')
             .color('type')
+
+        let geom4 = chart
+            .line()
+            .position('year*val')
         chart.render()
 
         // 宽度判断
