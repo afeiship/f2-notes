@@ -18,6 +18,57 @@
     <!-- 在 PC 上模拟 touch 事件 -->
     <script src="https://gw.alipayobjects.com/os/rmsportal/NjNldKHIVQRozfbAOJUW.js"></script>
     <script type="text/javascript">
+        class GroupConverter {
+            get size() {
+                return this.groups.size;
+            }
+            constructor(inDataMapping, inGroups) {
+                this.dataMapping = inDataMapping;
+                this.groups = inGroups;
+            }
+            add(inMapping, inGroup) {
+                this.dataMapping = Object.assign(this.dataMapping, inMapping);
+                this.groups.push(inGroup);
+                return this.convert();
+            }
+            remove(inKey) {
+                delete this.dataMapping[inKey];
+                const groups = this.groups.slice(0);
+                groups.forEach((group, groupIndex) => {
+                    const index = group.indexOf(inKey);
+                    if (index > -1) {
+                        group.splice(index, 1);
+                    }
+                    if (group.length === 0) {
+                        this.groups.splice(groupIndex, 1)
+                    }
+                })
+                return this.convert();
+            }
+            convert() {
+                const rst = [];
+                const dataMapping = this.dataMapping;
+                const groups = this.groups;
+
+                Object.keys(dataMapping).forEach(item => {
+                    for (let i = 0; i < this.size; i++) {
+                        dataMapping[item].forEach(dataItem => {
+                            dataItem[`g${i + 1}`] = null;
+                        })
+                    }
+                });
+
+                groups.forEach((group, index) => {
+                    group.forEach(dataItem => {
+                        dataMapping[dataItem].forEach(item => {
+                            item[`g${index + 1}`] = item.value;
+                            rst.push(item);
+                        });
+                    });
+                })
+                return rst;
+            }
+        }
         const data1 = [
             { year: '1951', value: 38, type: 's1' },
             { year: '1952', value: 16, type: 's1' },
@@ -45,8 +96,8 @@
         ];
 
         const data7 = [
-            { year: '1951', val: 12.2 },
-            { year: '1952', val: 30.6 }
+            { year: '1951', value: 12.2, type: 's7' },
+            { year: '1952', value: 30.6, type: 's7' }
         ];
 
         var dataRes = groupData(
@@ -57,11 +108,13 @@
                 type4: data4,
                 type5: data5,
                 type6: data6,
+                type7: data7
             },
             [
                 ['type1', 'type4', 'type6'],
                 ['type3', 'type2'],
-                ['type5']
+                ['type5'],
+                ['type7']
             ]
         );
 
@@ -120,8 +173,7 @@
             return rst;
         }
         // 数据格式
-                
-        dataRes = dataRes.concat(data7)
+
         console.log(dataRes);
 
         const chart = new F2.Chart({
@@ -212,7 +264,8 @@
 
         let geom4 = chart
             .line()
-            .position('year*val')
+            .position('year*g4')
+            .color('type')
         chart.render()
 
         // 宽度判断
