@@ -1,0 +1,25 @@
+{
+  "name": "f2-notes",
+  "version": "1.0.0",
+  "description": "> Antv f2 notes.",
+  "main": "express.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "node express.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/afeiship/f2-notes.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/afeiship/f2-notes/issues"
+  },
+  "homepage": "https://github.com/afeiship/f2-notes#readme",
+  "devDependencies": {
+    "express": "^4.16.4"
+  }
+}
