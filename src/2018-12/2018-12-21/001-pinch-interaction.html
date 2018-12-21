@@ -55,28 +55,19 @@
       var btnDash = document.getElementById("btn-dash");
       var btnDot = document.getElementById("btn-dot");
       var btnRemove = document.getElementById("btn-remove");
-      var data = [
-        {
-          x: "2018-12-01",
-          y: 1.2
-        },
-        {
-          x: "2018-12-02",
-          y: 2.2
-        },
-        {
-          x: "2018-12-03",
-          y: 4.3
-        },
-        {
-          x: "2018-12-04",
-          y: 6.3
-        },
-        {
-          x: "2018-12-05",
-          y: 3.3
+      var data = getData();
+
+      function getData() {
+        var result = [];
+
+        for (var i = 1; i < 20; i++) {
+          result.push({
+            x: "2018-12-" + String(i).padStart(2, 0),
+            y: Math.random() * 100
+          });
         }
-      ];
+        return result;
+      }
 
       var chart = new F2.Chart({
         id: "mountNode",
@@ -122,6 +113,7 @@
         .line()
         .position("x*y")
         .color("#ff6600");
+        
       chart.interaction("pinch", {
         maxScale: 3,
         minScale: 1
